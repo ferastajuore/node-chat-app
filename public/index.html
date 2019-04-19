@@ -9,21 +9,10 @@
 </head>
 
 <body>
-  <h1>Welcome To now chat app</h1>
+  <p>Welcome To new chat app</p>
 
   <script src="/socket.io/socket.io.js"></script>
-  <script>
-    // Making request from clint to server to open a websocket and keep connection open
-    var socket = io();
-
-    socket.on('connect', () => {
-      console.log('Connected to server');
-    })
-
-    socket.on('disconnect', () => {
-      console.log('Disconnect from server');
-    })
-  </script>
+  <script src="/js/index.js"></script>
 </body>
 
 </html>

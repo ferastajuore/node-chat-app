@@ -16,10 +16,18 @@ app.use(express.static(publicPath))
 
 // lesent to server 
   // connection
-io.on('connection',(sockit) => {
-  console.log('New user connected')
+io.on('connection',(socket) => {
+  console.log('New user connected');
 
-  sockit.on('disconnect',() => {
+  socket.on('createMessage', (message) => {
+    console.log('Create Message', message);
+    io.emit('newMessage',{
+      from: message.from,
+      text: message.text
+    })
+  })
+
+  socket.on('disconnect',() => {
     console.log('Disconnect from Clint');
   })
 })
