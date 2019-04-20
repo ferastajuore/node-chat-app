@@ -1,13 +1,30 @@
 // Making request from clint to server to open a websocket and keep connection open
 var socket = io();
 
-socket.on('connect', function() {
-  console.log('Connected to server');
-})
+function scrollToBottom() {
+  // Selectors
+  var messages = jQuery('#messages');
+  var newMessage = messages.children('li:last-child')
+  // Heights
+  var clientHeight = messages.prop('clientHeight');
+  var scrollTop = messages.prop('scrollTop');
+  var scrollHeight = messages.prop('scrollHeight');
+  var newMessageHeight = newMessage.innerHeight();
+  var lastMessageHeight = newMessage.prev().innerHeight();
 
-socket.on('disconnect', function() {
-  console.log('Disconnect from server');
-})
+  if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+    messages.scrollTop(scrollHeight);
+  }
+}
+
+socket.on('connect', function () {
+  console.log('Connected to server');
+});
+
+socket.on('disconnect', function () {
+  console.log('Disconnected from server');
+});
+
 
 
 // Send new message 
@@ -20,7 +37,8 @@ socket.on('newMessage', function (message) {
     createdAt: formattedTime
   })
 
-  $('#messages').append(html);  
+  $('#messages').append(html);
+  scrollToBottom();
 })
 
 
@@ -35,6 +53,7 @@ socket.on('newLocationMessage', function (message) {
   });
 
   $('#messages').append(html);
+  scrollToBottom();
 });
 
 
