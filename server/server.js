@@ -4,7 +4,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 
 
-const {generateMessage} = require('./unit/message');
+const {generateMessage , generateLocationMessage} = require('./units/message');
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
@@ -17,7 +17,7 @@ var io = socketIO(server);
 app.use(express.static(publicPath))
 
 // lesent to server 
-  // connection
+  // connection To server
 io.on('connection',(socket) => {
   console.log('New user connected');
 
@@ -28,14 +28,13 @@ io.on('connection',(socket) => {
   socket.on('createMessage', (message) => {
     console.log('Create Message', message);
     io.emit('newMessage', generateMessage(message.from, message.text));
-
-    // socket.broadcast.emit('newMessage',{
-    //   from: message.from,
-    //   text: message.text,
-    //   createdAt: new Date().getTime()
-    // })
   })
 
+  socket.on('createLocationMessage', (coords) => {
+    io.emit('newLocationMessage', generateLocationMessage('Admin',coords.latitude,coords.longitude));
+  })
+
+  // disconnect To server
   socket.on('disconnect',() => {
     console.log('Disconnect from Clint');
   })
